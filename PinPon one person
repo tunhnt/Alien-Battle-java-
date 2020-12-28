@@ -1,0 +1,142 @@
+import java.applet.Applet;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+public class PinPon extends Applet implements KeyListener, Runnable, MouseMotionListener {
+
+    Boolean isRunning = true;
+    int width;
+    int fps = 300;
+    int fpsa = 1000 / fps;
+    int height;
+    int score = 0;
+    int key;
+    Boolean dMove = true;
+    int dx, dy, dr, dSpeedX, dSpeedY;
+    int tableX, tableWidth, tableY;
+    Boolean gameOver = false;
+
+    public void init() {
+        width = 500;
+        height = 500;
+        dr = 30;
+        dSpeedX = 1;
+        dx = 20;
+        dSpeedY = 1;
+        dy = 100;
+        tableWidth = width / 2;
+        tableX = width / 2 - tableWidth / 2;
+        tableY = height - 10;
+        setSize(width, height);
+        addKeyListener(this);
+        addMouseMotionListener(this);
+        new Thread(AppletOyunu.this).start();
+
+    }
+
+    public void paint(Graphics g) {
+       
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, width, height);
+        g.setColor(Color.BLUE);
+        g.fillOval(dx, dy, dr, dr);
+        for (int i = 0; i < 10; i++) {
+            g.drawLine(tableX, tableY + i, tableX + tableWidth, tableY + i);
+        }
+        g.drawString(Integer.toString(score), width - 20, 20);
+
+        if (gameOver) {
+            g.drawString("OYUN BİTTİ", width / 2 - 10 * 3, height / 2);
+            g.drawString("Skorunuz= " + Integer.toString(score), width / 2 - 10 * 3, height / 2 + 10);
+            g.drawString("Bir Tuşa Basarak Çıkış Yapabilirsiniz", width / 2 - 35 * 3, height / 2 + 20);
+            isRunning = false;
+        }
+        if (!dMove) g.drawString("Oyun Duraklatıldı", width/2- 15*3, height/2);
+    }
+
+    public void move() {
+        if (dx > width - dr || dx < 0) {
+            dSpeedX = -dSpeedX;
+        }
+        if (dy <= 0) {
+            dSpeedY = -dSpeedY;
+            score++;
+            if (tableWidth > 10) {
+                tableWidth -= 20;
+                tableX += 10;
+            }
+
+        }
+        if (dx > tableX && dx + dr < tableX + tableWidth && dy + dr > tableY) {
+            dSpeedY = -dSpeedY;
+        }
+
+        if (dy > height + 100) {
+            gameOver = true;
+        }
+        dx += dSpeedX;
+        dy += dSpeedY;
+
+    }
+
+   
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+     
+    public void keyPressed(KeyEvent e) {
+        key = e.getKeyChar();
+        if (key == KeyEvent.VK_SPACE) {
+            dMove= !dMove;
+              
+        }
+
+        if (!isRunning) {
+            if (key == e.getKeyChar()) {
+                System.exit(0);
+            }
+        }
+    }
+
+      
+    public void keyReleased(KeyEvent e) {
+       
+    }
+
+     
+    public void run() {
+        while (isRunning) {
+            if (dMove) {
+                move();
+            }
+
+            repaint();
+            try {
+                Thread.sleep(fpsa);
+            } catch (Exception e) {
+            }
+        }
+
+    }
+
+     
+    public void mouseDragged(MouseEvent e) {
+    }
+
+     
+    public void mouseMoved(MouseEvent e) {
+        if (e.getX() + tableWidth / 2 < width && e.getX() - tableWidth / 2 > 0) {
+            tableX = e.getX() - tableWidth / 2;
+        }
+
+    }
+
+}
