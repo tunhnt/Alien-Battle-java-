@@ -1,45 +1,32 @@
-package Calisma;
-import java.util.Scanner;
+printf("HOSGELDİNİZ \n");
+	
 
-
-public class Calisma {
-
-    public static void main(String[] args){
-
-        System.out.println("REZERVASYON YAPMAK İSTİYORSANIZ 1'E BASIN");
-        
-        Scanner input = new Scanner(System.in);
-        int rez = input.nextInt();
-        int satirDegeri = 0;
-        int sutunDegeri = 0;
-        
-        if(rez == 1){
-            System.out.println("Lütfen satır değerini giriniz: ");
-            satirDegeri = input.nextInt();
-         
-            System.out.println("Lütfen sütun değerini giriniz: ");
-            sutunDegeri = input.nextInt();
-        }
-        
-         String secildi = " ";
-         
-        
-        for (int i = 1; i <= 13; i++) {
-            System.out.print(i);
-            for (int j = 1; j <= 4; j++) {
+	int satirDegeri = 0;
+    int sutunDegeri = 0;
+	
+	
+		printf("Lutfen satir degerini giriniz: ");
+		scanf("%d",&satirDegeri);
+		printf("Lutfen sutun degerini giriniz: ");
+		scanf("%d",&sutunDegeri);
+	
+	
+	char secildi = ' ';
+ 
+ 	int i;
+ 	int j;
+ 	for (i = 1; i <= 13; i++) {
+            printf("%d",i);
+            for (j = 1; j <= 4; j++) {
                 if(i == satirDegeri && j == sutunDegeri){
-                    secildi = "x";
+                    secildi = 'x';
                 }
-                System.out.print("["+ secildi+"]");
-                secildi = " ";
+                printf("[%c]", secildi);
+                secildi = ' ';
                 if(j == 2){
-                    System.out.print("     ");
+                    printf("     ");
                 }
                 
             }
-            System.out.println("\n");
+            printf("\n");
         }
-        
-    }
-
-}
